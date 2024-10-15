@@ -2,70 +2,45 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 
 
-# Función para cargar y parsear el XML
-def cargar_xml(file_path):
-    tree = ET.parse(file_path)
-    root = tree.getroot()
-    return root
-
-
-# Función para validar si una incidencia está en el rango de fechas válido
-def es_fecha_valida(fecha_str):
-    # Formato de la fecha, puedes ajustarlo según tu XML
-    formato_fecha = "%Y-%m-%d"
-
-    # Convertimos la fecha de la incidencia a un objeto datetime
-    fecha_incidencia = datetime.strptime(fecha_str, formato_fecha)
-
-    # Obtenemos la fecha actual del sistema
-    fecha_actual = datetime.now()
-
-    # Definimos el 1 de septiembre del año actual
-    inicio_septiembre = datetime(fecha_actual.year, 9, 1)
-
-    # Comprobamos si la fecha de la incidencia es válida
-    if inicio_septiembre <= fecha_incidencia <= fecha_actual:
+def validar_fecha(fecha_str):
+    """Valida que la fecha esté en formato YYYY-MM-DD."""
+    try:
+        datetime.strptime(fecha_str, "%Y-%m-%d")
         return True
-    else:
+    except ValueError:
         return False
 
 
-# Función para filtrar incidencias por fecha
-def filtrar_incidencias(root):
-    incidencias_ok = []
+def extraer_fechas_y_validar(xml_file):
+    # Cargar y parsear el archivo XML
+    tree = ET.parse(xml_file)
+    root = tree.getroot()
 
-    for incidencia in root.findall('incidencia'):
-        fecha = incidencia.find('fecha').text
-        if es_fecha_valida(fecha):
-            incidencias_ok.append(incidencia)
+    # Espacio de nombres en XML
+    ns = {'ns1': 'http://www.exemple.com/IncidenciasGrup4'}
 
-    return incidencias_ok
+    # Inicializar contadores
+    total_fechas = 0
+    total_fechas_validas = 0
 
+    # Iterar sobre cada incidencia en el XML
+    for incidencia in root.findall('.//ns1:Incidencia', ns):
+        # Extraer la fecha de incidencia
+        fecha_incidencia = incidencia.find('ns1:DataIncidencia', ns)
+        if fecha_incidencia is not None:
+            fecha_incidencia_str = fecha_incidencia.text
+            total_fechas += 1
 
-# Función para procesar las incidencias válidas y mostrar información
-def procesar_incidencias_ok(incidencias_ok):
-    print(f"Total de incidencias válidas: {len(incidencias_ok)}")
+            # Validar la fecha
+            if validar_fecha(fecha_incidencia_str):
+                total_fechas_validas += 1
 
-    # Imprimir alguna información relevante de las incidencias válidas
-    for incidencia in incidencias_ok:
-        id_incidencia = incidencia.find('id').text
-        fecha = incidencia.find('fecha').text
-        descripcion = incidencia.find('descripcion').text
-        print(f"ID: {id_incidencia}, Fecha: {fecha}, Descripción: {descripcion}")
-
-
-# Programa principal
-def main():
-    # Cargar el fichero XML (cambia la ruta al archivo correspondiente)
-    file_path = 'incidencias.xml'
-    root = cargar_xml(file_path)
-
-    # Filtrar incidencias por fecha
-    incidencias_ok = filtrar_incidencias(root)
-
-    # Procesar y mostrar las incidencias válidas
-    procesar_incidencias_ok(incidencias_ok)
+    print(f'Total de fechas encontradas: {total_fechas}')
+    print(f'Total de fechas válidas: {total_fechas_validas}')
 
 
-if __name__ == "__main__":
-    main()
+# Ruta del archivo XML
+ruta_archivo_xml = "/home/richard.yabrudy.7e6/Escriptori/DADES/Richard Yabrudy/Grup 4 - XML Con Excel.xml"
+
+# Llama a la función con la ruta a tu archivo XML
+extraer_fechas_y_validar(ruta_archivo_xml)
