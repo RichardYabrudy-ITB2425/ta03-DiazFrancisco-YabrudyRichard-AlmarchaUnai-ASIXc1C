@@ -35,7 +35,7 @@
 			<ns1:NomCognoms>diegote</ns1:NomCognoms>
 			<ns1:DataIncidencia>2024-10-01</ns1:DataIncidencia>
 			<ns1:TipusIncidencia>Altres...( Desgast / Vandalisme / Desaparició )</ns1:TipusIncidencia>
-			<ns1:EquipsServeisAfectatsSace/>
+			<ns1:EquipsServeisAfectatsSace>253800655000</ns1:EquipsServeisAfectatsSace>
 			<ns1:EquipsServeisAfectatsEtiqueta>Nose, solo falta un ratón</ns1:EquipsServeisAfectatsEtiqueta>
 			<ns1:DescripcioProposta>Falta un perifercio de entrada llamado ratón</ns1:DescripcioProposta>
 			<ns1:NivellUrgencia>Poc Urgent</ns1:NivellUrgencia>
@@ -49,7 +49,7 @@
 			<ns1:NomCognoms>Unai Llagostera Morera</ns1:NomCognoms>
 			<ns1:DataIncidencia>2024-10-01</ns1:DataIncidencia>
 			<ns1:TipusIncidencia>Xarxa</ns1:TipusIncidencia>
-			<ns1:EquipsServeisAfectatsSace/>
+			<ns1:EquipsServeisAfectatsSace>88334824</ns1:EquipsServeisAfectatsSace>
 			<ns1:EquipsServeisAfectatsEtiqueta>WLD-022</ns1:EquipsServeisAfectatsEtiqueta>
 			<ns1:DescripcioProposta>No es pot conectar a internet.</ns1:DescripcioProposta>
 			<ns1:NivellUrgencia>Poc Urgent</ns1:NivellUrgencia>
@@ -78,7 +78,7 @@
 			<ns1:DataIncidencia>2024-10-01</ns1:DataIncidencia>
 			<ns1:TipusIncidencia>Equips ( fallada )</ns1:TipusIncidencia>
 			<ns1:EquipsServeisAfectatsSace>WLD-010</ns1:EquipsServeisAfectatsSace>
-			<ns1:EquipsServeisAfectatsEtiqueta>253800000000</ns1:EquipsServeisAfectatsEtiqueta>
+			<ns1:EquipsServeisAfectatsEtiqueta>7774773790</ns1:EquipsServeisAfectatsEtiqueta>
 			<ns1:DescripcioProposta>No funciona boto dret del ratoli</ns1:DescripcioProposta>
 			<ns1:NivellUrgencia>Urgent</ns1:NivellUrgencia>
 			<ns1:CorreoElectronico>dylan.gonzalez.7e8@itb.cat</ns1:CorreoElectronico>
@@ -91,7 +91,7 @@
 			<ns1:NomCognoms>Dídac Lloret Martínez</ns1:NomCognoms>
 			<ns1:DataIncidencia>2024-10-01</ns1:DataIncidencia>
 			<ns1:TipusIncidencia>Programari  ( fallada )</ns1:TipusIncidencia>
-			<ns1:EquipsServeisAfectatsSace>ordinador</ns1:EquipsServeisAfectatsSace>
+			<ns1:EquipsServeisAfectatsSace>253800000000</ns1:EquipsServeisAfectatsSace>
 			<ns1:EquipsServeisAfectatsEtiqueta>758003000000</ns1:EquipsServeisAfectatsEtiqueta>
 			<ns1:DescripcioProposta>Pycharm no encen, reinstalar pycharm</ns1:DescripcioProposta>
 			<ns1:NivellUrgencia>Urgent</ns1:NivellUrgencia>
@@ -105,7 +105,7 @@
 			<ns1:NomCognoms>Abel Aymamí</ns1:NomCognoms>
 			<ns1:DataIncidencia>2024-10-01</ns1:DataIncidencia>
 			<ns1:TipusIncidencia>Programari  ( fallada )</ns1:TipusIncidencia>
-			<ns1:EquipsServeisAfectatsSace>No</ns1:EquipsServeisAfectatsSace>
+			<ns1:EquipsServeisAfectatsSace>78347849</ns1:EquipsServeisAfectatsSace>
 			<ns1:EquipsServeisAfectatsEtiqueta>WLD 028</ns1:EquipsServeisAfectatsEtiqueta>
 			<ns1:DescripcioProposta>L'ordinador no funciona</ns1:DescripcioProposta>
 			<ns1:NivellUrgencia>Urgent</ns1:NivellUrgencia>
