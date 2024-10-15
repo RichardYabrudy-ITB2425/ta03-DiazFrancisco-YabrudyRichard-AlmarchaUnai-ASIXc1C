@@ -1,23 +1,72 @@
 import xml.etree.ElementTree as ET
+import json
+from datetime import datetime
 
-# Define el espacio de nombres utilizado en el XML
-namespaces = {'ns1': 'http://www.exemple.com/IncidenciasGrup4'}
 
-# Parsear el documento XML
-tree = ET.parse('Grup 4 - XML Con Excel.xml')
-root = tree.getroot()
+def validar_fecha(fecha_str):
+    """Valida que la fecha esté en formato YYYY-MM-DD."""
+    try:
+        datetime.strptime(fecha_str, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False
 
-# Buscar el nodo NivellUrgencia utilizando el espacio de nombres
-item_code_node = root.find('ns1:Incidencias/ns1:Incidencia/ns1:NivellUrgencia', namespaces)
 
-# Comprobar si se ha encontrado el nodo
-if item_code_node is not None:
-    item_code = item_code_node.text
+def extraer_incidencias(xml_file):
+    # Cargar y parsear el archivo XML
+    tree = ET.parse(xml_file)
+    root = tree.getroot()
 
-    # Validar el valor del nodo NivellUrgencia
-    if item_code != 'ABWS':
-        raise ValueError('The ItemCode value is invalid.')
-    else:
-        print(f'NivellUrgencia: {item_code} is valid.')
-else:
-    print('Node not found.')
+    # Espacio de nombres en XML
+    ns = {'ns1': 'http://www.exemple.com/IncidenciasGrup4'}
+
+    # Inicializar listas
+    lista_todas_incidencias = []  # Lista para almacenar todas las incidencias
+    lista_incidencias_validas = []  # Lista para almacenar las incidencias válidas
+    incidencias_futuras = 0  # Contador para incidencias no válidas o futuras
+
+    # Obtener la fecha actual
+    fecha_actual = datetime.today().date()
+
+    # Iterar sobre cada incidencia en el XML
+    for incidencia in root.findall('.//ns1:Incidencia', ns):
+        # Extraer todos los elementos de la incidencia
+        incidencia_data = {}
+        for elemento in incidencia:
+            # Guardar los datos de cada elemento en un diccionario
+            incidencia_data[elemento.tag.split('}')[1]] = elemento.text
+
+        # Añadir la incidencia completa a la lista de todas las incidencias
+        lista_todas_incidencias.append(incidencia_data)
+
+        # Validar la fecha de la incidencia
+        if 'DataIncidencia' in incidencia_data and validar_fecha(incidencia_data['DataIncidencia']):
+            fecha_incidencia = datetime.strptime(incidencia_data['DataIncidencia'], "%Y-%m-%d").date()
+
+            # Si la fecha es hoy o antes, añadimos a la lista de válidas
+            if fecha_incidencia <= fecha_actual:
+                lista_incidencias_validas.append(incidencia_data)
+            else:
+                # Contamos las incidencias con fechas futuras
+                incidencias_futuras += 1
+
+    # Guardar las incidencias válidas en un archivo .json
+    with open('incidencias_validas.json', 'w', encoding='utf-8') as f:
+        json.dump(lista_incidencias_validas, f, ensure_ascii=False, indent=4)
+
+    # Imprimir resultados
+    print(f'Total de incidencias encontradas: {len(lista_todas_incidencias)}')
+    print(f'Total de incidencias válidas: {len(lista_incidencias_validas)}')
+    print(f'Total de incidencias futuras: {incidencias_futuras}')
+
+    # Imprimir las incidencias válidas
+    print('Incidencias válidas:')
+    for inc in lista_incidencias_validas:
+        print(inc)
+
+
+# Ruta del archivo XML
+ruta_archivo_xml = "./Grup 4 - XML Con Excel.xml"
+
+# Llama a la función con la ruta a tu archivo XML
+extraer_incidencias(ruta_archivo_xml)
