@@ -50,14 +50,29 @@ def extraer_incidencias(xml_file):
                 # Contamos las incidencias con fechas futuras
                 incidencias_futuras += 1
 
+    # Generar el nombre del archivo JSON con la fecha actual
+    nombre_archivo_json = f'incidencias_validas_{fecha_actual}.json'
+
     # Guardar las incidencias válidas en un archivo .json
-    with open('incidencias_validas.json', 'w', encoding='utf-8') as f:
+    with open(nombre_archivo_json, 'w', encoding='utf-8') as f:
         json.dump(lista_incidencias_validas, f, ensure_ascii=False, indent=4)
 
     # Imprimir resultados
     print(f'Total de incidencias encontradas: {len(lista_todas_incidencias)}')
     print(f'Total de incidencias válidas: {len(lista_incidencias_validas)}')
     print(f'Total de incidencias futuras: {incidencias_futuras}')
+
+    # Crear estadísticas de las incidencias
+    estadisticas = {
+        "total_incidencias": len(lista_todas_incidencias),
+        "incidencias_validas": len(lista_incidencias_validas),
+        "incidencias_futuras": incidencias_futuras,
+        "fecha_procesamiento": str(fecha_actual)
+    }
+
+    # Guardar las estadísticas en un archivo JSON
+    with open(f'estadisticas_{fecha_actual}.json', 'w', encoding='utf-8') as f:
+        json.dump(estadisticas, f, ensure_ascii=False, indent=4)
 
     # Imprimir las incidencias válidas
     print('Incidencias válidas:')
