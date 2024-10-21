@@ -60,7 +60,7 @@ def extraer_incidencias(xml_file):
     print("\nIncidencias válidas:")
     for incidencia in lista_incidencias_validas:
         print(incidencia)
-        time.sleep(0.5)  # Espera medio segundo entre cada impresión
+        time.sleep(0.2)  # Espera 0.2 segundos entre cada impresión
 
     # Guardar listas en archivos JSON
     with open('incidencias_todas.json', 'w') as f:
@@ -74,7 +74,7 @@ def extraer_incidencias(xml_file):
 
 
 # Ruta del archivo XML
-ruta_archivo_xml = "/home/richard.yabrudy.7e6/Escriptori/DADES/Richard Yabrudy/Grup 4 - XML Con Excel.xml"
+ruta_archivo_xml = "./Grup 4 - XML Con Excel.xml"
 
 # Llama a la función
 extraer_incidencias(ruta_archivo_xml)
