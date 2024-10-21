@@ -74,7 +74,7 @@ def extraer_incidencias(xml_file):
 
 
 # Ruta del archivo XML
-ruta_archivo_xml = "/home/richard.yabrudy.7e6/Escriptori/DADES/Richard Yabrudy/Grup 4 - XML Con Excel.xml"
+ruta_archivo_xml = "./Grup 4 - XML Con Excel.xml"
 
 # Llama a la función
 extraer_incidencias(ruta_archivo_xml)
