@@ -3,8 +3,13 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 import json
 from tqdm import tqdm
-import time  # Importamos time para controlar la velocidad
+import time
+from rich.console import Console
+from rich.panel import Panel
+from rich.text import Text
 
+# Inicializar consola Rich
+console = Console()
 
 def validar_fecha(fecha_str):
     """Valida que la fecha esté en formato YYYY-MM-DD."""
@@ -13,7 +18,6 @@ def validar_fecha(fecha_str):
         return True
     except ValueError:
         return False
-
 
 def extraer_incidencias(xml_file):
     # Cargar y parsear el archivo XML
@@ -32,7 +36,7 @@ def extraer_incidencias(xml_file):
 
     # Iterar sobre cada incidencia en el XML con barra de progreso
     for incidencia in tqdm(root.findall('.//ns1:Incidencia', ns), total=total_incidencias,
-                           desc="Procesando incidencias"):
+                           desc="Procesando incidencias", colour="green"):  # Barra de progreso en verde
         # Extraer todos los elementos de la incidencia
         incidencia_data = {}
         for elemento in incidencia:
@@ -47,20 +51,7 @@ def extraer_incidencias(xml_file):
             lista_incidencias_validas.append(incidencia_data)  # Añadir a la lista de válidas
 
         # Simulamos un pequeño retraso para que la barra de progreso sea visible
-        time.sleep(0.005)  # Ajusta este valor para cambiar la velocidad
-
-    # Imprimir resultados
-    print(f'Total de incidencias encontradas: {len(lista_todas_incidencias)}')
-
-    # Retardamos la impresión de las incidencias válidas para que no sea tan rápida
-    print(f'Total de incidencias válidas: {len(lista_incidencias_validas)}')
-    time.sleep(1)  # Espera un segundo antes de mostrar las incidencias válidas
-
-    # Mostrar las incidencias válidas lentamente
-    print("\nIncidencias válidas:")
-    for incidencia in lista_incidencias_validas:
-        print(incidencia)
-        time.sleep(0.2)  # Espera 0.2 segundos entre cada impresión
+        time.sleep(0.005)
 
     # Guardar listas en archivos JSON
     with open('incidencias_todas.json', 'w') as f:
@@ -69,9 +60,11 @@ def extraer_incidencias(xml_file):
     with open('incidencias_validas.json', 'w') as f:
         json.dump(lista_incidencias_validas, f, indent=4)  # Guardar incidencias válidas
 
-    # Imprimir la ruta donde se guardaron los archivos
-    print(f'Archivos guardados en: {os.getcwd()}')
-
+    # Mostrar un banner en la consola
+    banner_text = Text(f"Total de incidencias encontradas: {len(lista_todas_incidencias)}\n"
+                       f"Total de incidencias válidas: {len(lista_incidencias_validas)}",
+                       justify="center")
+    console.print(Panel(banner_text, title="Resumen de Incidencias", expand=False))
 
 # Ruta del archivo XML
 ruta_archivo_xml = "./Grup 4 - XML Con Excel.xml"
