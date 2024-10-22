@@ -23,11 +23,13 @@ def extraer_incidencias(xml_file):
     # Inicializar listas
     lista_todas_incidencias = []  # Lista para almacenar todas las incidencias
     lista_incidencias_validas = []  # Lista para almacenar las incidencias válidas
-    lista_incidencias_futuras = []  # Lista para almacenar las incidencias futuras
+    lista_incidencias_erroneas = []  # Lista para almacenar las incidencias erróneas
     incidencias_molt_urgent = 0  # Contador para incidencias "Molt Urgent"
 
     # Obtener la fecha actual
     fecha_actual = datetime.today().date()
+    # Definir el límite de septiembre del año actual
+    fecha_septiembre_actual = datetime(year=fecha_actual.year, month=9, day=1).date()
 
     # Iterar sobre cada incidencia en el XML
     for incidencia in root.findall('.//ns1:Incidencia', ns):
@@ -36,7 +38,6 @@ def extraer_incidencias(xml_file):
         for elemento in incidencia:
             # Guardar los datos de cada elemento en un diccionario
             incidencia_data[elemento.tag.split('}')[1]] = elemento.text
-
         # Añadir la incidencia completa a la lista de todas las incidencias
         lista_todas_incidencias.append(incidencia_data)
 
@@ -44,28 +45,28 @@ def extraer_incidencias(xml_file):
         if 'DataIncidencia' in incidencia_data and validar_fecha(incidencia_data['DataIncidencia']):
             fecha_incidencia = datetime.strptime(incidencia_data['DataIncidencia'], "%Y-%m-%d").date()
 
-            # Si la fecha es hoy o antes, añadimos a la lista de válidas
-            if fecha_incidencia <= fecha_actual:
+            # Si la fecha es posterior a agosto de este año y anterior o igual a hoy, es válida
+            if fecha_septiembre_actual <= fecha_incidencia <= fecha_actual:
                 lista_incidencias_validas.append(incidencia_data)
 
                 # Contar cuántas incidencias tienen nivel de urgencia "Molt Urgent"
                 if incidencia_data.get('NivellUrgencia') == "Molt Urgent":
                     incidencias_molt_urgent += 1
             else:
-                # Añadir a la lista de incidencias futuras
-                lista_incidencias_futuras.append(incidencia_data)
+                # Si la fecha es antes de septiembre de este año o superior a hoy, es errónea
+                lista_incidencias_erroneas.append(incidencia_data)
 
     # Generar el nombre del archivo JSON con la fecha actual
     nombre_archivo_json_validas = f'incidencias_validas_{fecha_actual}.json'
-    nombre_archivo_json_futuras = f'incidencias_futuras_{fecha_actual}.json'
+    nombre_archivo_json_erroneas = f'incidencias_erroneas_{fecha_actual}.json'
 
     # Guardar las incidencias válidas en un archivo .json
     with open(nombre_archivo_json_validas, 'w', encoding='utf-8') as f:
         json.dump(lista_incidencias_validas, f, ensure_ascii=False, indent=4)
 
-    # Guardar las incidencias futuras en un archivo .json
-    with open(nombre_archivo_json_futuras, 'w', encoding='utf-8') as f:
-        json.dump(lista_incidencias_futuras, f, ensure_ascii=False, indent=4)
+    # Guardar las incidencias erróneas en un archivo .json
+    with open(nombre_archivo_json_erroneas, 'w', encoding='utf-8') as f:
+        json.dump(lista_incidencias_erroneas, f, ensure_ascii=False, indent=4)
 
     # Calcular el porcentaje de incidencias "Molt Urgent"
     porcentaje_molt_urgent = 0
@@ -75,14 +76,14 @@ def extraer_incidencias(xml_file):
     # Imprimir resultados
     print(f'Total de incidencias encontradas: {len(lista_todas_incidencias)}')
     print(f'Total de incidencias válidas: {len(lista_incidencias_validas)}')
-    print(f'Total de incidencias futuras: {len(lista_incidencias_futuras)}')
+    print(f'Total de incidencias erróneas: {len(lista_incidencias_erroneas)}')
     print(f'Porcentaje de incidencias "Molt Urgent": {porcentaje_molt_urgent:.2f}%')
 
     # Crear estadísticas de las incidencias
     estadisticas = {
         "total_incidencias": len(lista_todas_incidencias),
         "incidencias_validas": len(lista_incidencias_validas),
-        "incidencias_futuras": len(lista_incidencias_futuras),
+        "incidencias_erroneas": len(lista_incidencias_erroneas),
         "incidencias_molt_urgent": incidencias_molt_urgent,
         "porcentaje_molt_urgent": porcentaje_molt_urgent,
         "fecha_procesamiento": str(fecha_actual)
@@ -103,4 +104,3 @@ ruta_archivo_xml = "./Grup 4 - XML Con Excel.xml"
 
 # Llama a la función con la ruta a tu archivo XML
 extraer_incidencias(ruta_archivo_xml)
-
