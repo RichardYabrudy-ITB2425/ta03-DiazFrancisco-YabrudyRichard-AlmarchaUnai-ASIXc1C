@@ -7,9 +7,12 @@ import time
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
+from colorama import Fore, Style, init
 
-# Inicializar consola Rich
+# Inicializar colorama y consola Rich
+init(autoreset=True)
 console = Console()
+
 
 def validar_fecha(fecha_str):
     """Valida que la fecha esté en formato YYYY-MM-DD."""
@@ -18,6 +21,7 @@ def validar_fecha(fecha_str):
         return True
     except ValueError:
         return False
+
 
 def extraer_incidencias(xml_file):
     # Cargar y parsear el archivo XML
@@ -35,23 +39,27 @@ def extraer_incidencias(xml_file):
     total_incidencias = len(root.findall('.//ns1:Incidencia', ns))
 
     # Iterar sobre cada incidencia en el XML con barra de progreso
-    for incidencia in tqdm(root.findall('.//ns1:Incidencia', ns), total=total_incidencias,
-                           desc="Procesando incidencias", colour="green"):  # Barra de progreso en verde
-        # Extraer todos los elementos de la incidencia
-        incidencia_data = {}
-        for elemento in incidencia:
-            # Guardar los datos de cada elemento en un diccionario
-            incidencia_data[elemento.tag.split('}')[1]] = elemento.text
+    desc = f"{Fore.GREEN}Procesando incidencias"
+    with tqdm(total=total_incidencias, desc=desc,
+              bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed} < {remaining}, {rate_fmt}]") as pbar:
 
-        # Añadir la incidencia completa a la lista de todas las incidencias
-        lista_todas_incidencias.append(incidencia_data)
+        for incidencia in root.findall('.//ns1:Incidencia', ns):
+            # Extraer todos los elementos de la incidencia
+            incidencia_data = {}
+            for elemento in incidencia:
+                # Guardar los datos de cada elemento en un diccionario
+                incidencia_data[elemento.tag.split('}')[1]] = elemento.text
 
-        # Validar la fecha de la incidencia
-        if 'DataIncidencia' in incidencia_data and validar_fecha(incidencia_data['DataIncidencia']):
-            lista_incidencias_validas.append(incidencia_data)  # Añadir a la lista de válidas
+            # Añadir la incidencia completa a la lista de todas las incidencias
+            lista_todas_incidencias.append(incidencia_data)
 
-        # Simulamos un pequeño retraso para que la barra de progreso sea visible
-        time.sleep(0.005)
+            # Validar la fecha de la incidencia
+            if 'DataIncidencia' in incidencia_data and validar_fecha(incidencia_data['DataIncidencia']):
+                lista_incidencias_validas.append(incidencia_data)  # Añadir a la lista de válidas
+
+            # Simulamos un pequeño retraso para que la barra de progreso sea visible
+            time.sleep(0.005)
+            pbar.update(1)  # Actualiza la barra de progreso
 
     # Guardar listas en archivos JSON
     with open('incidencias_todas.json', 'w') as f:
@@ -66,9 +74,9 @@ def extraer_incidencias(xml_file):
                        justify="center")
     console.print(Panel(banner_text, title="Resumen de Incidencias", expand=False))
 
+
 # Ruta del archivo XML
 ruta_archivo_xml = "./Grup 4 - XML Con Excel.xml"
 
 # Llama a la función
 extraer_incidencias(ruta_archivo_xml)
-
