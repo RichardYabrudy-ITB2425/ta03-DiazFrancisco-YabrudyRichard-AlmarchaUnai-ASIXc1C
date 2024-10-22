@@ -80,4 +80,3 @@ ruta_archivo_xml = "./Grup 4 - XML Con Excel.xml"
 
 # Llama a la función
 extraer_incidencias(ruta_archivo_xml)
-
