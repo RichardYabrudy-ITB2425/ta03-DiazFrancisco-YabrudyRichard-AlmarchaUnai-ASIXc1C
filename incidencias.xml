@@ -6980,7 +6980,7 @@
 			<ns1:DataIncidencia>2025-11-24</ns1:DataIncidencia>
 			<ns1:TipusIncidencia>Xarxa</ns1:TipusIncidencia>
 			<ns1:EquipsServeisAfectatsSace>SACE99999</ns1:EquipsServeisAfectatsSace>
-			<ns1:EquipsServeisAfectatsEtiqueta>SACE11111</ns1:EquipsServeisAfectatsEtiqueta>
+			<ns1:EquipsServeisAfectatsEtiqueta>SACE1111</ns1:EquipsServeisAfectatsEtiqueta>
 			<ns1:DescripcioProposta>Hi ha interrupcions freqüents a la xarxa. Proposta de solució: Comprovar la configuració del router i fer proves de velocitat.</ns1:DescripcioProposta>
 			<ns1:NivellUrgencia>Molt urgent</ns1:NivellUrgencia>
 			<ns1:CorreoElectronico>ignasi.perez@itb.cat</ns1:CorreoElectronico>
