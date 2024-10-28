@@ -7,11 +7,11 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 from colorama import Fore, init, Style
+import os
 
 # Inicializar colorama y consola Rich
 init(autoreset=True)
 console = Console()
-
 
 def validar_fecha(fecha_str):
     """Valida que la fecha esté en formato YYYY-MM-DD."""
@@ -21,11 +21,21 @@ def validar_fecha(fecha_str):
     except ValueError:
         return False
 
-
 def extraer_incidencias(xml_file):
-    # Cargar y parsear el archivo XML
-    tree = ET.parse(xml_file)
-    root = tree.getroot()
+    # Verificar que el archivo existe
+    if not os.path.exists(xml_file):
+        console.print(Panel(Text("Error: El archivo XML no existe o la ruta es incorrecta.", justify="center"),
+                            title="Archivo no encontrado", style="bold red", expand=False))
+        return
+
+    try:
+        # Cargar y parsear el archivo XML
+        tree = ET.parse(xml_file)
+        root = tree.getroot()
+    except ET.ParseError:
+        console.print(Panel(Text("Error: El archivo XML no es válido o está corrupto.", justify="center"),
+                            title="Error de XML", style="bold red", expand=False))
+        return
 
     # Espacio de nombres en XML
     ns = {'ns1': 'http://www.exemple.com/IncidenciasGrup4'}
@@ -50,7 +60,8 @@ def extraer_incidencias(xml_file):
             # Extraer todos los elementos de la incidencia
             incidencia_data = {}
             for elemento in incidencia:
-                incidencia_data[elemento.tag.split('}')[1]] = elemento.text
+                tag_name = elemento.tag.split('}')[1]  # Obtener el nombre de la etiqueta sin el namespace
+                incidencia_data[tag_name] = elemento.text
             lista_todas_incidencias.append(incidencia_data)
 
             # Validar la fecha de la incidencia
@@ -99,7 +110,7 @@ def extraer_incidencias(xml_file):
         json.dump(estadisticas, f, ensure_ascii=False, indent=4)
 
 # Ruta del archivo XML
-ruta_archivo_xml = "./Grup 4 - XML Con Excel.xml"
+ruta_archivo_xml = "./Incidencias.xml"
 
 # Llama a la función con la ruta a tu archivo XML
 extraer_incidencias(ruta_archivo_xml)
