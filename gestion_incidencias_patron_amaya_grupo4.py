@@ -1,4 +1,5 @@
 """
+
 TA03 - MDS - Incidencias informáticas
 Grupo 4 - Richard Yabrudy, Alejandro Diaz y Unai Almarcha
 
@@ -6,13 +7,20 @@ Programa Python para gestionar incidencias, almacenarlas en .JSON,
 procesar datos y mostrar por pantalla información relevante.
 
 - Si el programa falla al ejecutarse, posiblemente se deba por falta
-de alguna instalación pip, rich en la mayoría de los casos.
+de alguna instalación pip, tqdm o rich en la mayoría de los casos.
 
-- Tiene control y validación de fechas, control de xml y oculta
-cierta información relevante ;) * JaviPoints2 (JP2)*
+- Estas son librerias necesarias para el funcionamiento del programa,
+también para las librerías gráficas de la barra de progreso.
+
+- El programa tiene controles y validación de fechas, control de xml
+y oculta cierta información relevante ;) * JaviPoints2 (JP2)*
 
 - Los ficheros con los que trabajamos son case sensitive, un buen
-ejemplo es el xml.
+ejemplo es el nombre del xml.
+
+- De ser necesario, si el programa carga muchísimas incidencias, puedes
+ajustar el timer de timesleep en la línea 101, en caso de que el mismo
+tarde más de lo esperado en procesarlas.
 
 """
 import xml.etree.ElementTree as ET
@@ -23,12 +31,13 @@ from tqdm import tqdm
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
-from colorama import Fore, init, Style
+from colorama import Fore, init
 import os
 
 # Inicializar colorama y consola Rich
 init(autoreset=True)
 console = Console()
+
 
 def validar_fecha(fecha_str):
     """Valida que la fecha esté en formato YYYY-MM-DD."""
@@ -37,6 +46,7 @@ def validar_fecha(fecha_str):
         return True
     except ValueError:
         return False
+
 
 def extraer_incidencias(xml_file):
     # Verificar que el archivo existe
@@ -105,7 +115,7 @@ def extraer_incidencias(xml_file):
 
     # Calcular el porcentaje de incidencias "Molt Urgent"
     porcentaje_molt_urgent = (
-                incidencias_molt_urgent / len(lista_incidencias_validas) * 100) if lista_incidencias_validas else 0
+            incidencias_molt_urgent / len(lista_incidencias_validas) * 100) if lista_incidencias_validas else 0
 
     # Mostrar el resumen en consola
     console.print(Panel(Text(f"Total de incidencias encontradas: {len(lista_todas_incidencias)}\n"
@@ -125,6 +135,7 @@ def extraer_incidencias(xml_file):
     }
     with open(f'estadisticas_{fecha_actual}.json', 'w', encoding='utf-8') as f:
         json.dump(estadisticas, f, ensure_ascii=False, indent=4)
+
 
 # Ruta del archivo XML
 ruta_archivo_xml = "./incidencias.xml"
