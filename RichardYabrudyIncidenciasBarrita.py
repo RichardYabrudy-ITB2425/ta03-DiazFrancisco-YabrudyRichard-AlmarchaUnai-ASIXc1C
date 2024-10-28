@@ -1,4 +1,3 @@
-import os
 import xml.etree.ElementTree as ET
 from datetime import datetime
 import json
@@ -60,6 +59,8 @@ def extraer_incidencias(xml_file):
             # Simulamos un pequeño retraso para que la barra de progreso sea visible
             time.sleep(0.005)
             pbar.update(1)  # Actualiza la barra de progreso
+
+
 
     # Guardar listas en archivos JSON
     with open('incidencias_todas.json', 'w') as f:
