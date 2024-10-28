@@ -1,3 +1,20 @@
+"""
+TA03 - MDS - Incidencias informáticas
+Grupo 4 - Richard Yabrudy, Alejandro Diaz y Unai Almarcha
+
+Programa Python para gestionar incidencias, almacenarlas en .JSON,
+procesar datos y mostrar por pantalla información relevante.
+
+- Si el programa falla al ejecutarse, posiblemente se deba por falta
+de alguna instalación pip, rich en la mayoría de los casos.
+
+- Tiene control y validación de fechas, control de xml y oculta
+cierta información relevante ;) * JaviPoints2 (JP2)*
+
+- Los ficheros con los que trabajamos son case sensitive, un buen
+ejemplo es el xml.
+
+"""
 import xml.etree.ElementTree as ET
 import json
 import time
@@ -110,7 +127,7 @@ def extraer_incidencias(xml_file):
         json.dump(estadisticas, f, ensure_ascii=False, indent=4)
 
 # Ruta del archivo XML
-ruta_archivo_xml = "./Incidencias.xml"
+ruta_archivo_xml = "./incidencias.xml"
 
 # Llama a la función con la ruta a tu archivo XML
 extraer_incidencias(ruta_archivo_xml)

@@ -99,7 +99,7 @@ def extraer_incidencias(xml_file):
         json.dump(estadisticas, f, ensure_ascii=False, indent=4)
 
 # Ruta del archivo XML
-ruta_archivo_xml = "./Incidencias.xml"
+ruta_archivo_xml = "./incidencias.xml"
 
 # Llama a la función con la ruta a tu archivo XML
 extraer_incidencias(ruta_archivo_xml)
